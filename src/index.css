@@ -1,0 +1,79 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+body {
+  background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+.bg-gray-900 {
+  background-color: rgba(17, 24, 39, 0.9);
+}
+
+.bg-gray-800 {
+  background-color: rgba(31, 41, 55, 0.9);
+}
+
+.bg-gray-700 {
+  background-color: rgba(55, 65, 81, 0.9);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-in-out;
+}
+
+.hover-grow {
+  transition: transform 0.3s ease-in-out;
+}
+
+.hover-grow:hover {
+  transform: scale(1.05);
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+  50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px #4299e1, 0 0 10px #4299e1, 0 0 15px #4299e1; }
+  50% { box-shadow: 0 0 10px #4299e1, 0 0 20px #4299e1, 0 0 30px #4299e1; }
+}
+
+.glow-effect {
+  animation: glow 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.pulse-effect {
+  animation: pulse 2s infinite;
+}
