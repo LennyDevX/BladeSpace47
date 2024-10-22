@@ -39,6 +39,21 @@ const Profile: React.FC<ProfileProps> = ({
   const experienceToNextLevel = playerLevel * 1000;
   const experiencePercentage = ((experience / experienceToNextLevel) * 100).toFixed(2);
 
+  const calculatePerformance = (ship: Starship) => {
+    const totalIncome = ship.totalRewards || 0;
+    const totalCost = ship.cost + (ship.maintenanceCost || 0) * (ship.missionsCompleted || 0);
+    return totalIncome > 0 ? (totalIncome / totalCost) * 100 : 0;
+  };
+
+  const getRarityColor = (rarity: string) => {
+    switch (rarity) {
+      case 'Common': return 'text-gray-400';
+      case 'Uncommon': return 'text-green-400';
+      case 'Rare': return 'text-purple-400';
+      default: return 'text-gray-400';
+    }
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -49,7 +64,7 @@ const Profile: React.FC<ProfileProps> = ({
       <h3 className="text-2xl font-bold mb-4 text-center">Perfil del Jugador</h3>
       <div className="grid md:grid-cols-2 gap-6">
         <motion.div 
-          className="bg-gray-800 p-6 rounded-lg"
+          className="bg-gray-800 p-6 rounded-lg shadow-lg"
           whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
@@ -92,7 +107,7 @@ const Profile: React.FC<ProfileProps> = ({
           </div>
         </motion.div>
         <motion.div 
-          className="bg-gray-800 p-6 rounded-lg"
+          className="bg-gray-800 p-6 rounded-lg shadow-lg"
           whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
@@ -129,32 +144,49 @@ const Profile: React.FC<ProfileProps> = ({
         </motion.div>
       </div>
       <motion.div 
-        className="mt-6 bg-gray-800 p-6 rounded-lg"
+        className="mt-6 bg-gray-800 p-6 rounded-lg shadow-lg"
         whileHover={{ scale: 1.02 }}
         transition={{ type: "spring", stiffness: 300 }}
       >
         <h4 className="text-xl font-bold mb-4">Naves en Propiedad</h4>
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {ownedShips.map((ship, index) => (
             <motion.div 
               key={ship.id} 
-              className="bg-gray-700 p-4 rounded-lg"
+              className="bg-gray-700 p-4 rounded-lg shadow"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <img src={ship.image} alt={ship.name} className="w-full h-32 object-cover rounded-lg mb-2" />
-              <h5 className="font-bold">{ship.name}</h5>
-              <p className="text-sm mb-2">Rareza: {ship.rarity}</p>
-              <p className="text-sm">Misiones completadas: {ship.missionsCompleted || 0}</p>
-              <p className="text-sm">Recompensas totales: {ship.totalRewards || 0} puntos</p>
-              <div className="mt-2 bg-gray-600 rounded-full h-2">
-                <div 
-                  className="bg-blue-500 h-2 rounded-full" 
-                  style={{ width: `${ship.performance || 0}%` }}
-                ></div>
+              <div className="relative h-32 mb-2">
+                <img src={ship.image} alt={ship.name} className="w-full h-full object-cover rounded-lg" />
+                <div className="absolute top-0 right-0 bg-gray-900 bg-opacity-75 text-white px-2 py-1 rounded-bl-lg">
+                  <span className={`font-bold ${getRarityColor(ship.rarity)}`}>{ship.rarity}</span>
+                </div>
               </div>
-              <p className="text-xs text-right mt-1">Rendimiento: {ship.performance || 0}%</p>
+              <h5 className="font-bold text-lg mb-2">{ship.name}</h5>
+              <div className="grid grid-cols-2 gap-2 text-sm mb-2">
+                <div>
+                  <span className="text-gray-400">Misiones:</span> {ship.missionsCompleted || 0}
+                </div>
+                <div>
+                  <span className="text-gray-400">Recompensas:</span> {ship.totalRewards || 0}
+                </div>
+              </div>
+              <div className="mb-2">
+                <p className="text-sm text-gray-400 mb-1">Rendimiento:</p>
+                <div className="w-full bg-gray-600 rounded-full h-2">
+                  <div 
+                    className="bg-blue-500 h-2 rounded-full" 
+                    style={{ width: `${calculatePerformance(ship)}%` }}
+                  ></div>
+                </div>
+                <p className="text-xs text-right mt-1">{calculatePerformance(ship).toFixed(2)}%</p>
+              </div>
+              <div className="flex justify-between items-center">
+                <FaChartLine className={`${calculatePerformance(ship) > 100 ? 'text-green-500' : 'text-red-500'}`} />
+                <FaLightbulb className={`${ship.usageCount < 5 ? 'text-yellow-500' : 'text-gray-500'}`} />
+              </div>
             </motion.div>
           ))}
         </div>

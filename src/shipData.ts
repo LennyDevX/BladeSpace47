@@ -18,7 +18,11 @@ export const starterShips: Starship[] = [
     roi: 10,
     image: shipImages['Explorer I'],
     usageCount: 0,
-    rarity: 'Common'
+    rarity: 'Common',
+    missionsCompleted: 0,
+    totalRewards: 0,
+    performance: 0,
+    maintenanceCost: 50
   },
   {
     id: 'starter-ship2',
@@ -31,7 +35,11 @@ export const starterShips: Starship[] = [
     roi: 15,
     image: shipImages['Miner X'],
     usageCount: 0,
-    rarity: 'Uncommon'
+    rarity: 'Uncommon',
+    missionsCompleted: 0,
+    totalRewards: 0,
+    performance: 0,
+    maintenanceCost: 100
   },
   {
     id: 'starter-ship3',
@@ -44,6 +52,10 @@ export const starterShips: Starship[] = [
     roi: 20,
     image: shipImages['Voyager Elite'],
     usageCount: 0,
-    rarity: 'Rare'
+    rarity: 'Rare',
+    missionsCompleted: 0,
+    totalRewards: 0,
+    performance: 0,
+    maintenanceCost: 150
   }
 ];

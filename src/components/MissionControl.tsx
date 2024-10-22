@@ -93,7 +93,12 @@ const MissionControl: React.FC<MissionControlProps> = ({
     setMissionResult(`¡Misión completada! Ganaste ${earnedPoints} puntos, ${earnedExperience} XP y ${earnedArtifact} artefacto(s).`);
 
     const updatedShips = ownedShips.map(ship => 
-      ship.id === selectedShip?.id ? { ...ship, usageCount: (ship.usageCount || 0) + 1 } : ship
+      ship.id === selectedShip?.id ? { 
+        ...ship, 
+        usageCount: (ship.usageCount || 0) + 1,
+        missionsCompleted: (ship.missionsCompleted || 0) + 1,
+        totalRewards: (ship.totalRewards || 0) + earnedPoints
+      } : ship
     );
 
     try {
@@ -151,7 +156,7 @@ const MissionControl: React.FC<MissionControlProps> = ({
       <div className="mb-4">
         <h4 className="text-lg font-bold mb-2">Seleccionar Nave</h4>
         {ownedShips.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {ownedShips.map((ship) => (
               <motion.button
                 key={ship.id}
@@ -160,16 +165,18 @@ const MissionControl: React.FC<MissionControlProps> = ({
                   selectedShip && selectedShip.id === ship.id
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-700 hover:bg-gray-600'
-                } ${ship.usageCount >= 5 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                } ${ship.usageCount >= 5 ? 'opacity-50 cursor-not-allowed' : ''} overflow-hidden`}
                 whileHover={{ scale: ship.usageCount < 5 ? 1.05 : 1 }}
                 whileTap={{ scale: ship.usageCount < 5 ? 0.95 : 1 }}
                 disabled={ship.usageCount >= 5}
               >
-                <img src={ship.image} alt={ship.name} className="w-full h-24 object-cover rounded-t-lg mb-2" />
-                <FaRocket className="inline-block mr-2" />
-                {ship.name}
-                <br />
-                <small>Usos: {ship.usageCount}/5</small>
+                <div className="relative h-24 mb-2">
+                  <img src={ship.image} alt={ship.name} className="w-full h-full object-cover rounded-t-lg" />
+                  <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs py-1 px-2">
+                    Usos: {ship.usageCount}/5
+                  </div>
+                </div>
+                <div className="text-sm font-semibold">{ship.name}</div>
               </motion.button>
             ))}
           </div>
@@ -178,9 +185,11 @@ const MissionControl: React.FC<MissionControlProps> = ({
         )}
       </div>
       {selectedShip && (
-        <div className="mb-4">
-          <p>Nave seleccionada: {selectedShip.name}</p>
+        <div className="mb-4 p-4 bg-gray-800 rounded-lg">
+          <h5 className="font-bold mb-2">Nave seleccionada: {selectedShip.name}</h5>
           <p>Usos: {selectedShip.usageCount}/5</p>
+          <p>Misiones completadas: {selectedShip.missionsCompleted || 0}</p>
+          <p>Recompensas totales: {selectedShip.totalRewards || 0} puntos</p>
         </div>
       )}
       {!currentMission && (
